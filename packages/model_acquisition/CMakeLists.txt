@@ -62,13 +62,20 @@ add_definitions(${PCL_DEFINITIONS})
 
 ## Declare a C++ executable
 
+add_library(baxter_interface src/baxter_interface.cpp)
+
+target_link_libraries(baxter_interface
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+)
+
 add_executable(model_acquisition src/model_acquisition.cpp
-  src/baxter_interface.cpp
   src/kinect2_interface.cpp)
 
-add_dependencies(model_acquisition baxter_core_msgs baxter_traj_streamer)
+add_dependencies(model_acquisition baxter_interface baxter_core_msgs baxter_traj_streamer)
 
 target_link_libraries(model_acquisition
+  baxter_interface
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
 )
@@ -80,4 +87,13 @@ add_dependencies(planar_pointcloud cwru_pcl_utils)
 target_link_libraries(planar_pointcloud
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
+)
+
+add_executable(merry_demo src/merry_demo.cpp)
+
+add_dependencies(merry_demo baxter_interface)
+
+target_link_libraries(merry_demo
+  baxter_interface
+  ${catkin_LIBRARIES}
 )
