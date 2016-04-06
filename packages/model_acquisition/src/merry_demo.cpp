@@ -11,11 +11,12 @@
 #include <std_msgs/UInt32.h>
 
 ros::Subscriber g_cmd_sub;
-
+uint g_cmd;
 BaxterInterface* baxter;
 
 void reset()
 {
+  ROS_INFO("RESET");
   // 'left_e0', 'left_e1', 'left_s0', 'left_s1', 'left_w0', 'left_w1', 'left_w2'
   Vectorq7x1 vec_resetPose;
   vec_resetPose(2, 0) = 0.0;
@@ -31,6 +32,7 @@ void reset()
 
 void wave()
 {
+  ROS_INFO("WAVE");
   Vectorq7x1 vec_startWavePose;
   vec_startWavePose(2, 0) = 0.0;
   vec_startWavePose(3, 0) = 0.0;
@@ -77,6 +79,7 @@ void nod()
 
 void hug()
 {
+  ROS_INFO("HUG");
   Vectorq7x1 vec_startHugPose;
   vec_startHugPose(2, 0) = 0.0;
   vec_startHugPose(3, 0) = 0.0;
@@ -105,6 +108,7 @@ void hug()
 
 void moveArm()
 {
+  ROS_INFO("MOVE ARM");
   Vectorq7x1 vec_startMoveArmPose;
   vec_startMoveArmPose(2, 0) = 0.0;
   vec_startMoveArmPose(3, 0) = 0.0;
@@ -136,16 +140,27 @@ void moveArm()
 
 void alexaCodeCB(const std_msgs::UInt32& cmd_msg)
 {
-  uint cmd = cmd_msg.data;
-
-  switch(cmd)
+  g_cmd = cmd_msg.data;
+  std::cout << "CMD: "<<g_cmd << std::endl;
+  switch(g_cmd)
   {
-    case 0: reset();
-    case 1: wave();
-    case 2: nod();
-    case 3: hug();
-    case 4: moveArm();
+    case 0: 
+      reset();
+      break;
+    case 1: 
+      wave();
+      break;
+    case 2: 
+      nod();
+      break;
+    case 3: 
+      hug();
+      break;
+    case 4: 
+      moveArm();
+      break;
   }
+  g_cmd = 100;
 }
 
 int main(int argc, char** argv)
